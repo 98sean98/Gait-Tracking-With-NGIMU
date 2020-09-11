@@ -4,7 +4,7 @@ close all;
 
 %% Import data
 
-sessionData = importSession('FootTrackingSession');
+sessionData = importSession('TrackingSession');
 
 samplePeriod = 1 / 400; % 400 Hz
 [sessionData, time] = resampleSession(sessionData, samplePeriod); % resample data so that all measuremnts share the same time vector
