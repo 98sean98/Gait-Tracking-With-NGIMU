@@ -31,7 +31,7 @@ for sampleIndex = 1 : (numberOfSamples - marginSizeInSamples)
         isMovingWithMargin(sampleIndex : (sampleIndex + marginSizeInSamples)) = 1;
     end
 end
-for sampleIndex = (numberOfSamples - marginSizeInSamples) : -1 : 1
+for sampleIndex = (numberOfSamples - marginSizeInSamples) : -1 : (marginSizeInSamples + 1)
     if(isMoving(sampleIndex) == 1)
         isMovingWithMargin((sampleIndex - marginSizeInSamples) : sampleIndex) = 1;
     end
@@ -82,7 +82,7 @@ end
 
 figure;
 
-subplots(1) = subplot(3, 1, 1);
+subplots(1) = subplot(5, 1, 1);
 hold on;
 plot(time, acceleration(:, 1), 'r');
 plot(time, acceleration(:, 2), 'g');
@@ -93,7 +93,7 @@ xlabel('seconds)');
 ylabel('m/s/s');
 legend('x', 'y', 'z', 'is stationary');
 
-subplots(2) = subplot(3, 1, 2);
+subplots(2) = subplot(5, 1, 2);
 hold on;
 plot(time, velocity(:, 1), 'r');
 plot(time, velocity(:, 2), 'g');
@@ -103,7 +103,7 @@ xlabel('seconds)');
 ylabel('m/s');
 legend('x', 'y', 'z');
 
-subplots(3) = subplot(3, 1, 3);
+subplots(3) = subplot(5, 1, 3);
 hold on;
 plot(time, position(:, 1), 'r');
 plot(time, position(:, 2), 'g');
@@ -113,12 +113,25 @@ xlabel('seconds)');
 ylabel('m');
 legend('x', 'y', 'z');
 
-linkaxes(subplots, 'x');
+subplots(4) = subplot(5,1,4);
+hold on;
+plot(position(:, 1), position(:, 2), 'r');
+title('2D map');
+xlabel('x');
+ylabel('y');
+legend('path');
 
-%% Create animation
+subplots(5) = subplot(5, 1, 5);
+hold on;
+plot(position(:, 1), position(:, 3), 'b');
+title('Elevation');
+xlabel('x');
+ylabel('z');
+legend('path');
 
-SixDofAnimation(position, quatern2rotMat(quaternion), ...
-                'SamplePlotFreq', 20, 'Trail', 'All', ...
-                'Position', [9 39 1280 768], ...
-                'AxisLength', 0.1, 'ShowArrowHead', false, ...
-                'Xlabel', 'X (m)', 'Ylabel', 'Y (m)', 'Zlabel', 'Z (m)', 'ShowLegend', false);
+figure;
+plot3(position(:, 1), position(:, 2), position(:, 3));
+title('3D map');
+xlabel('x');
+ylabel('y');
+zlabel('z');
