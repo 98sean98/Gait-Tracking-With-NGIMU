@@ -9,19 +9,19 @@ sessionData = importSession('TrackingSession');
 samplePeriod = 1 / 400; % 400 Hz
 [sessionData, time] = resampleSession(sessionData, samplePeriod); % resample data so that all measuremnts share the same time vector
 
-quaternion = sessionData.(sessionData.deviceNames{1}).quaternion.vector;
 acceleration = sessionData.(sessionData.deviceNames{1}).earth.vector * 9.81; % convert to m/s/s
 
 numberOfSamples = length(time);
 
 %% Identify stationary periods
 
-threshold = 1; % acceleration threshold in m/s/s
+lateralThreshold = 0.3; % lateral acceleration threshold in m/s/s
+verticalThreshold = 1; % vertical acceleration threshold in m/s/s
 
 % Determine as moving if acceleration greater than theshold
-isMoving = abs(acceleration(:,1)) > threshold | ...
-           abs(acceleration(:,2)) > threshold | ...
-           abs(acceleration(:,3)) > threshold;
+isMoving = abs(acceleration(:,1)) > lateralThreshold | ...
+           abs(acceleration(:,2)) > lateralThreshold | ...
+           abs(acceleration(:,3)) > verticalThreshold;
 
 % Add margin to extend each period identified as moving
 marginSizeInSamples = ceil(0.1 / samplePeriod); % margin = 0.1 seconds
@@ -79,59 +79,4 @@ for sampleIndex = 2 : numberOfSamples
 end
 
 %% Plot data
-
-figure;
-
-subplots(1) = subplot(5, 1, 1);
-hold on;
-plot(time, acceleration(:, 1), 'r');
-plot(time, acceleration(:, 2), 'g');
-plot(time, acceleration(:, 3), 'b');
-plot(time, isStationary * 10, 'k');
-title('Acceleration');
-xlabel('seconds)');
-ylabel('m/s/s');
-legend('x', 'y', 'z', 'is stationary');
-
-subplots(2) = subplot(5, 1, 2);
-hold on;
-plot(time, velocity(:, 1), 'r');
-plot(time, velocity(:, 2), 'g');
-plot(time, velocity(:, 3), 'b');
-title('Velocity');
-xlabel('seconds)');
-ylabel('m/s');
-legend('x', 'y', 'z');
-
-subplots(3) = subplot(5, 1, 3);
-hold on;
-plot(time, position(:, 1), 'r');
-plot(time, position(:, 2), 'g');
-plot(time, position(:, 3), 'b');
-title('Position');
-xlabel('seconds)');
-ylabel('m');
-legend('x', 'y', 'z');
-
-subplots(4) = subplot(5,1,4);
-hold on;
-plot(position(:, 1), position(:, 2), 'r');
-title('2D map');
-xlabel('x');
-ylabel('y');
-legend('path');
-
-subplots(5) = subplot(5, 1, 5);
-hold on;
-plot(position(:, 1), position(:, 3), 'b');
-title('Elevation');
-xlabel('x');
-ylabel('z');
-legend('path');
-
-figure;
-plot3(position(:, 1), position(:, 2), position(:, 3));
-title('3D map');
-xlabel('x');
-ylabel('y');
-zlabel('z');
+plotData(time, acceleration, velocity, position, isStationary);
