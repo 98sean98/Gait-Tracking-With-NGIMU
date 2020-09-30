@@ -16,7 +16,7 @@ numberOfSamples = length(time);
 %% Identify stationary periods
 
 lateralThreshold = 0.3; % lateral acceleration threshold in m/s/s
-verticalThreshold = 0.3; % vertical acceleration threshold in m/s/s
+verticalThreshold = 1; % vertical acceleration threshold in m/s/s
 
 % Determine as moving if acceleration greater than theshold
 isMoving = abs(acceleration(:,1)) > lateralThreshold | ...
@@ -24,7 +24,7 @@ isMoving = abs(acceleration(:,1)) > lateralThreshold | ...
            abs(acceleration(:,3)) > verticalThreshold;
 
 % Add margin to extend each period identified as moving
-marginSizeInSamples = ceil(0.05 / samplePeriod); % margin = 0.1 seconds
+marginSizeInSamples = ceil(0.1 / samplePeriod); % margin = 0.1 seconds
 isMovingWithMargin = isMoving;
 for sampleIndex = 1 : (numberOfSamples - marginSizeInSamples)
     if(isMoving(sampleIndex) == 1)
@@ -79,4 +79,4 @@ for sampleIndex = 2 : numberOfSamples
 end
 
 %% Plot data
-plotData(time, acceleration, velocity, position, isStationary);
+plotData(time, acceleration, velocity, position);

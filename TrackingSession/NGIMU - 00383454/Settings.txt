@@ -45,7 +45,7 @@
 /serial/invert, False
 /sd/automatic, True
 /sd/prefix, "LOG"
-/sd/number, 20
+/sd/number, 17
 /sd/size, 4096
 /sd/period, 0
 /ahrs/gain, 0.5f
@@ -55,13 +55,13 @@
 /ahrs/magnetic/max, 70f
 /rate/sensors, 50f
 /rate/magnitudes, 0f
-/rate/quaternion, 0f
+/rate/quaternion, 50f
 /rate/matrix, 0f
-/rate/euler, 10f
+/rate/euler, 50f
 /rate/linear, 0f
-/rate/earth, 400f
+/rate/earth, 50f
 /rate/altitude, 1f
-/rate/temperature, 0f
+/rate/temperature, 1f
 /rate/humidity, 0f
 /rate/battery, 1f
 /rate/analogue, 0f
@@ -85,5 +85,5 @@
 /muted, False
 /battery/voltage, 3.2f
 /battery/capacity, 1000f
-/battery/health, 98.04688f
+/battery/health, 97.94922f
 /battery/cycles, 1.21f

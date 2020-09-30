@@ -1,4 +1,4 @@
-function plotData(time, acceleration, velocity, position, isStationary)
+function plotData(time, acceleration, velocity, position)
   figure;
   % acceleration
   subplots(1) = subplot(3, 1, 1);
@@ -6,11 +6,10 @@ function plotData(time, acceleration, velocity, position, isStationary)
   plot(time, acceleration(:, 1), 'r');
   plot(time, acceleration(:, 2), 'g');
   plot(time, acceleration(:, 3), 'b');
-  plot(time, isStationary * 10, 'k');
   title('Acceleration');
   xlabel('seconds');
   ylabel('m/s/s');
-  legend('x', 'y', 'z', 'isStationary');
+  legend('x', 'y', 'z');
 
   % velocity
   subplots(2) = subplot(3, 1, 2);
