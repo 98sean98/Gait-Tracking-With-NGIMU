@@ -11,6 +11,34 @@ acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector * 9.81; % 
 
 numberOfSamples = length(time);
 
+% remove first and last few seconds of data
+timeCutoff = [3 3]; % cut off first 3 and last 3 seconds of data
+rowIndexCutOff = [0 0];
+
+for rowIndex = 1: numberOfSamples
+  if (time(rowIndex) < timeCutoff(1))
+    rowIndexCutOff(1) = rowIndexCutOff(1) + 1;
+  elseif (time(rowIndex) > (time(end) - timeCutoff(2)))
+    rowIndexCutOff(2) = rowIndex;
+    break;
+  endif
+end
+
+for rowIndex = 1: rowIndexCutOff(1)
+  time(1) = [];
+  acceleration(1, :) = [];
+end
+
+for rowIndex = rowIndexCutOff(2): numberOfSamples
+  time(end) = [];
+  acceleration(end, :) = [];
+end
+
+updatedNumberOfSamples = length(time);
+for rowIndex = 1 : updatedNumberOfSamples
+  time(rowIndex) = time(rowIndex) - timeCutoff(1);
+end
+
 % filter noise in acceleration data
 
 function updatedVector = filterNoise(vector, lowerBound, upperBound)
@@ -21,8 +49,8 @@ function updatedVector = filterNoise(vector, lowerBound, upperBound)
   endif
 endfunction
 
-thresholds = [-0.5 -0.5 -0.5; 0.5 0.5 0.5]; % noise filter threshold for [x, y, z], lower and upper bounds
-for index = 1: numberOfSamples
+thresholds = [-0.1 -0.1 -0.15; 0.15 0.1 0.1]; % noise filter threshold for [x, y, z], lower and upper bounds
+for index = 1: updatedNumberOfSamples
   for vectorIndex = 1: 3
     acceleration(index, vectorIndex) = filterNoise(acceleration(index, vectorIndex), thresholds(1, vectorIndex), thresholds(2, vectorIndex));
   end
