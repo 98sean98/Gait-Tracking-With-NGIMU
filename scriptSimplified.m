@@ -6,13 +6,13 @@ close all;
 
 sessionData = importSession('TrackingSession');
 
-time = sessionData.(sessionData.deviceNames{1}).linear.time;
-acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector * 9.81; % convert to m/s/s
+time = sessionData.(sessionData.deviceNames{1}).earth.time;
+acceleration = sessionData.(sessionData.deviceNames{1}).earth.vector * 9.81; % convert to m/s/s
 
 numberOfSamples = length(time);
 
 % remove first and last few seconds of data
-timeCutoff = [3 3]; % cut off first 3 and last 3 seconds of data
+timeCutoff = [27 13]; % cut off first 3 and last 3 seconds of data
 rowIndexCutOff = [0 0];
 
 for rowIndex = 1: numberOfSamples
@@ -49,17 +49,17 @@ function updatedVector = filterNoise(vector, lowerBound, upperBound)
   endif
 endfunction
 
-thresholds = [-0.1 -0.1 -0.15; 0.15 0.1 0.1]; % noise filter threshold for [x, y, z], lower and upper bounds
+thresholds = [0 -1 -1 ; 0 1 1.2]; % noise filter threshold for [x, y, z], lower and upper bounds
 for index = 1: updatedNumberOfSamples
   for vectorIndex = 1: 3
     acceleration(index, vectorIndex) = filterNoise(acceleration(index, vectorIndex), thresholds(1, vectorIndex), thresholds(2, vectorIndex));
   end
 end
 
-% integrate for velocity
+% numerically integrate for velocity
 velocity = cumtrapz(time, acceleration);
 
-% integrate for displacement
+% numerically integrate for displacement
 displacement = cumtrapz(time, velocity);
 
 % plot data
