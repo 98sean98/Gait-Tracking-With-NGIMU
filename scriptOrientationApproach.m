@@ -6,7 +6,9 @@ close all;
 sessionData = importSession('TrackingSession');
 
 time = sessionData.(sessionData.deviceNames{1}).matrix.time;
+% acceleration = sessionData.(sessionData.deviceNames(1)).linear.vector;
 rotMRaw = sessionData.(sessionData.deviceNames{1}).matrix.matrix;
+frequency = 400; % Hz
 
 sampleSize = length(time);
 
@@ -22,7 +24,7 @@ end
 timeCutoff = [5 5]; % cut off first few and last few seconds of data
 rowIndexCutOff = [0 0];
 
-for rowIndex = 1: sampleSize
+for rowIndex = 1 : sampleSize
   if (time(rowIndex) < timeCutoff(1))
     rowIndexCutOff(1) = rowIndexCutOff(1) + 1;
   elseif (time(rowIndex) > (time(end) - timeCutoff(2)))
@@ -46,10 +48,40 @@ for rowIndex = 1 : sampleSize
   time(rowIndex) = time(rowIndex) - timeCutoff(1);
 end
 
-% calculate discrete travel distance
-velocity(1 : sampleSize) = 1; % m/s
-frequency = 400; % Hz
-distance = velocity / frequency;
+% calculate discrete travel distance from linear acceleration
+acceleration(1 : sampleSize, 1) = 0.01;
+velocity = zeros(sampleSize);
+t = 1 / frequency;
+
+for index = 1 : sampleSize
+  v1 = velocity(index);
+  a = acceleration(index);
+  v2 = v1 + a * t;
+  
+  if (index < sampleSize)
+    velocity(index + 1) = v2;
+  endif
+end
+
+distance = zeros(sampleSize);
+
+for index = 1 : sampleSize
+  v1 = velocity(index);
+  
+  if (index == sampleSize)
+    v2 = 0;
+  else
+    v2 = velocity(index + 1);
+  endif
+  
+  d = 0.5 * (v1 + v2) * t;
+  
+  if (d < 0)
+    distance(index) = 0;
+  else
+    distance(index) = d;
+  endif
+end
 
 % obtain rotation matrix for bias correction
 stationaryRowIndexCutOff = 1000;
@@ -83,4 +115,6 @@ position(:, 2) = - position(:, 2);
 % rotate position data from body frame to earth frame
 
 % plot data
-plotData(time, zeros(sampleSize, 3), zeros(sampleSize, 3), position);
+accelerationData = horzcat(acceleration, zeros(sampleSize, 2));
+velocityData = horzcat(velocity, zeros(sampleSize, 2));
+plotData(time, accelerationData, velocityData, position);
