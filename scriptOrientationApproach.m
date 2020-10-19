@@ -6,8 +6,9 @@ close all;
 sessionData = importSession('TrackingSession');
 
 time = sessionData.(sessionData.deviceNames{1}).matrix.time;
-% acceleration = sessionData.(sessionData.deviceNames(1)).linear.vector;
 rotMRaw = sessionData.(sessionData.deviceNames{1}).matrix.matrix;
+acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector;
+
 frequency = 400; % Hz
 
 sampleSize = length(time);
@@ -18,10 +19,26 @@ for index = 1 : sampleSize
   rotM(:, :, index) = rotMRaw(:, :, index)';
 end
 
+% filter acceleration noise
+function [updatedVector] = filterNoise(vector, lowerBound, upperBound)
+  updatedVector = vector;
+  % if vector is in between the lower and upper bounds, it is considered as noise
+  if (vector > lowerBound && vector < upperBound)
+    updatedVector = 0;
+  endif
+endfunction
+
+thresholds = [-0.1 -0.1 -1; 0.1 0.1 1]; % noise filter threshold for [x, y, z], lower and upper bounds
+for index = 1: length(acceleration)
+  for vectorIndex = 1: 3
+    [acceleration(index, vectorIndex)] = filterNoise(acceleration(index, vectorIndex), thresholds(1, vectorIndex), thresholds(2, vectorIndex));
+  end
+end
+
 % use complementary filter to fuse accelerometer and gyroscope data to obtain rotation matrices
 
 % remove first and last few seconds of data
-timeCutoff = [5 5]; % cut off first few and last few seconds of data
+timeCutoff = [2 2]; % cut off first few and last few seconds of data
 rowIndexCutOff = [0 0];
 
 for rowIndex = 1 : sampleSize
@@ -36,11 +53,13 @@ end
 for rowIndex = 1: rowIndexCutOff(1)
   time(1) = [];
   rotM(:, :, 1) = [];
+  acceleration(1, :) = [];
 end
 
 for rowIndex = rowIndexCutOff(2): sampleSize
   time(end) = [];
   rotM(:, :, end) = [];
+  acceleration(end, :) = [];
 end
 
 sampleSize = length(time);
@@ -49,7 +68,7 @@ for rowIndex = 1 : sampleSize
 end
 
 % calculate discrete travel distance from linear acceleration
-acceleration(1 : sampleSize, 1) = 0.01;
+acceleration = [acceleration(:, 1); zeros(sampleSize - length(acceleration), 1)];
 velocity = zeros(sampleSize);
 t = 1 / frequency;
 
@@ -84,7 +103,7 @@ for index = 1 : sampleSize
 end
 
 % obtain rotation matrix for bias correction
-stationaryRowIndexCutOff = 1000;
+stationaryRowIndexCutOff = 300;
 stationaryRotM = rotM(:, :, 1 : stationaryRowIndexCutOff);
 meanStationaryRotM = mean(stationaryRotM, 3)
 biasCorrectionRotM = inverse(meanStationaryRotM)
