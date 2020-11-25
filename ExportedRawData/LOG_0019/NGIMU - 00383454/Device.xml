@@ -1,0 +1,17 @@
+<Device>
+  <DeviceInformation DeviceName="NGIMU" SerialNumber="00383454" FirmwareVersion="v1.14 (Aug 25 2020 01:19:43)" BootloaderVersion="v2.0 (Mar 27 2019 15:56:10)" HardwareVersion="v1.6 (February 2020)" />
+  <ConnectionInformation ConnectionType="File" FilePath="F:\LOG_0019.XIO" />
+  <TimeStamps First="2020-09-24 13:10:44.022" Last="2020-09-24 13:11:03.830" TimeSpan="00:00:19.808" />
+  <FilesCreated>
+    <File Name="ahrsAlignment.csv" Messages="1" />
+    <File Name="sensors.csv" Messages="992" />
+    <File Name="quaternion.csv" Messages="992" />
+    <File Name="euler.csv" Messages="992" />
+    <File Name="earth.csv" Messages="992" />
+    <File Name="altitude.csv" Messages="20" />
+    <File Name="temperature.csv" Messages="20" />
+    <File Name="battery.csv" Messages="20" />
+    <File Name="button.csv" Messages="1" />
+  </FilesCreated>
+  <Statistics BytesReceived="244985" PacketsReceived="4119" BundlesReceived="4029" MessagesReceived="4119" ReceiveErrors="0" />
+</Device>

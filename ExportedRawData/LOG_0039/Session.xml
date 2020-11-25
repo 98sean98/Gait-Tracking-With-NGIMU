@@ -1,0 +1,8 @@
+<Session>
+  <SessionInformation Name="LOG_0039" Date="2020-10-19 08:47:31" Duration="00:02:51.630" />
+  <ApplicationInformation ApplicationName="NGIMU SD Card File Converter" ApplicationVersion="1.16.7542.2878" ApiVersion="1.16.7542.2877" />
+  <UserInformation UserName="SEAN_CHOK" MachineName="NO19070280K" />
+  <Devices>
+    <Device SerialNumber="00383454" DeviceName="NGIMU" ConnectionType="File" DirectoryName="NGIMU - 00383454" />
+  </Devices>
+</Session>
