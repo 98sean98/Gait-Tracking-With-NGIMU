@@ -7,7 +7,7 @@ sessionData = importSession('TrackingSession');
 
 time = sessionData.(sessionData.deviceNames{1}).matrix.time;
 rotMRaw = sessionData.(sessionData.deviceNames{1}).matrix.matrix;
-acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector;
+acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector * 9.81;
 
 frequency = 400; % Hz
 
@@ -38,7 +38,7 @@ end
 % use complementary filter to fuse accelerometer and gyroscope data to obtain rotation matrices
 
 % remove first and last few seconds of data
-timeCutoff = [2 2]; % cut off first few and last few seconds of data
+timeCutoff = [3 3]; % cut off first few and last few seconds of data
 rowIndexCutOff = [0 0];
 
 for rowIndex = 1 : sampleSize
@@ -68,8 +68,12 @@ for rowIndex = 1 : sampleSize
 end
 
 % calculate discrete travel distance from linear acceleration
-acceleration = [acceleration(:, 1); zeros(sampleSize - length(acceleration), 1)];
-velocity = zeros(sampleSize);
+if (length(acceleration) < sampleSize)
+  acceleration = [acceleration(:, 1); zeros(sampleSize - length(acceleration), 1)];
+else
+  acceleration = acceleration(1 : sampleSize, 1);
+endif
+velocity = zeros(sampleSize); 
 t = 1 / frequency;
 
 for index = 1 : sampleSize
@@ -103,7 +107,7 @@ for index = 1 : sampleSize
 end
 
 % obtain rotation matrix for bias correction
-stationaryRowIndexCutOff = 300;
+stationaryRowIndexCutOff = 400;
 stationaryRotM = rotM(:, :, 1 : stationaryRowIndexCutOff);
 meanStationaryRotM = mean(stationaryRotM, 3)
 biasCorrectionRotM = inverse(meanStationaryRotM)
