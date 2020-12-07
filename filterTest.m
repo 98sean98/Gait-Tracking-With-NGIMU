@@ -2,23 +2,40 @@ clc
 clear
 close all
 
-table = csvread('linear.csv');
+sessionData = importSession('TrackingSession');
+
+time = sessionData.(sessionData.deviceNames{1}).linear.time;
+acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector * 9.81; % convert from g to m/s/s
 sampleFrequency = 400;
 
-time = table(:, 1);
-a = table(:, 2) * 9.81;
+a = acceleration(:, 1);
 
-a_filtered = myFilter(a, sampleFrequency, 1, 'low');
+a_filtered = myFilter(a, sampleFrequency, 2.5, 'low');
 
-v_without_a_filter = cumtrapz(time, a);
+v_unfiltered = cumtrapz(time, a);
 
 v = cumtrapz(time, a_filtered);
 
-v_filtered = myFilter(v, sampleFrequency, 0.05, 'high');
+v_filtered = myFilter(v, sampleFrequency, 0.1, 'high');
 
-d = cumtrapz(time, v);
+d_unfiltered = cumtrapz(time, v_unfiltered);
+
+d = cumtrapz(time, v_filtered);
+d_filtered = myFilter(d, sampleFrequency, 0.1, 'high');
 
 figure;
 hold on;
-plot(time, a);
-plot(time, a_filtered);
+plot(time, a, 'b');
+plot(time, a_filtered, 'r');
+
+figure;
+hold on;
+plot(time, v_unfiltered, 'b');
+plot(time, v, 'g');
+plot(time, v_filtered, 'r');
+
+figure;
+hold on;
+% plot(time, d_unfiltered, 'b');
+plot(time, d, 'g');
+plot(time, d_filtered, 'r');

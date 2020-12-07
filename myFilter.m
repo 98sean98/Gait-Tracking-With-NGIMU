@@ -1,4 +1,4 @@
-% high pass filter is used to remove drift
+% filter is used to remove drift and noise
 
 function filteredData = myFilter(data, sampleFrequency, filterCutoff, filterType)
   order = 1;

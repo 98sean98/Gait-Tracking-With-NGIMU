@@ -44,7 +44,7 @@ numberOfSamples = length(time);
 % end
 
 % filter noise, and obtain is stationary matrix
-accleration = highPassFilter(sampleFrequency, acceleration);
+accleration = myFilter(acceleration, sampleFrequency, 1, 'low');
 
 % isStationary = zeros(size(acceleration));
 %
@@ -67,10 +67,11 @@ accleration = highPassFilter(sampleFrequency, acceleration);
 
 % numerically integrate for velocity, and filter
 velocity = cumtrapz(time, acceleration);
-velocity = highPassFilter(sampleFrequency, velocity);
+velocity = myFilter(velocity, sampleFrequency, 0.05, 'high');
 
-% numerically integrate for displacement
+% numerically integrate for displacement, and filter
 displacement = cumtrapz(time, velocity);
+displacement = myFilter(displacement, sampleFrequency, 0.05, 'high');
 
 % plot data
 plotData(time, acceleration, velocity, displacement);
