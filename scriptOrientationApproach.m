@@ -10,6 +10,8 @@ rotMRaw = sessionData.(sessionData.deviceNames{1}).matrix.matrix;
 acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector * 9.81;
 
 frequency = 400; % Hz
+shouldUseConstantVelocity = true;
+assumedConstantVelocity = 1.5; % m/s
 
 sampleSize = length(time);
 
@@ -85,6 +87,11 @@ for index = 1 : sampleSize
     velocity(index + 1) = v2;
   endif
 end
+
+% constant velocity at 1m/s
+if (shouldUseConstantVelocity)
+  velocity = zeros(sampleSize) + assumedConstantVelocity;
+endif
 
 distance = zeros(sampleSize);
 
