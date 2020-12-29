@@ -45,7 +45,7 @@
 /serial/invert, False
 /sd/automatic, True
 /sd/prefix, "LOG"
-/sd/number, 45
+/sd/number, 43
 /sd/size, 4096
 /sd/period, 0
 /ahrs/gain, 0.5f
@@ -86,4 +86,4 @@
 /battery/voltage, 3.2f
 /battery/capacity, 1000f
 /battery/health, 98.04688f
-/battery/cycles, 2.39f
+/battery/cycles, 2.32f
