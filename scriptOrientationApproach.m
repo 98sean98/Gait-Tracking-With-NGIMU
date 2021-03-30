@@ -11,7 +11,7 @@ acceleration = sessionData.(sessionData.deviceNames{1}).linear.vector * 9.81;
 
 frequency = 400; % Hz
 shouldUseConstantVelocity = true;
-assumedConstantVelocity = 1.5; % m/s
+assumedConstantVelocity = 1; % m/s
 
 sampleSize = length(time);
 
@@ -36,8 +36,6 @@ for index = 1: length(acceleration)
     [acceleration(index, vectorIndex)] = filterNoise(acceleration(index, vectorIndex), thresholds(1, vectorIndex), thresholds(2, vectorIndex));
   end
 end
-
-% use complementary filter to fuse accelerometer and gyroscope data to obtain rotation matrices
 
 % remove first and last few seconds of data
 timeCutoff = [3 3]; % cut off first few and last few seconds of data
@@ -88,7 +86,7 @@ for index = 1 : sampleSize
   endif
 end
 
-% constant velocity at 1m/s
+% optionally override velocity as an assumed constant
 if (shouldUseConstantVelocity)
   velocity = zeros(sampleSize) + assumedConstantVelocity;
 endif
@@ -141,8 +139,6 @@ end
 
 % flip position y-axis along y = 0
 position(:, 2) = - position(:, 2);
-
-% rotate position data from body frame to earth frame
 
 % plot data
 accelerationData = horzcat(acceleration, zeros(sampleSize, 2));
