@@ -1,5 +1,9 @@
 <Session>
+<<<<<<< HEAD
   <SessionInformation Name="LOG_0046" Date="2021-03-30 17:00:30" Duration="00:00:08.905" />
+=======
+  <SessionInformation Name="LOG_0048" Date="2021-04-28 17:18:38" Duration="00:01:39.177" />
+>>>>>>> ff03c21 (remove acceleration related calculations to reduce memory use)
   <ApplicationInformation ApplicationName="NGIMU SD Card File Converter" ApplicationVersion="1.16.7542.2878" ApiVersion="1.16.7542.2877" />
   <UserInformation UserName="SEAN_CHOK" MachineName="NO19070280K" />
   <Devices>

@@ -1,5 +1,6 @@
 <Device>
   <DeviceInformation DeviceName="NGIMU" SerialNumber="00383454" FirmwareVersion="v1.14 (Aug 25 2020 01:19:43)" BootloaderVersion="v2.0 (Mar 27 2019 15:56:10)" HardwareVersion="v1.6 (February 2020)" />
+<<<<<<< HEAD
   <ConnectionInformation ConnectionType="File" FilePath="F:\LOG_0046.XIO" />
   <TimeStamps First="2021-03-30 16:42:32.022" Last="2021-03-30 16:42:53.387" TimeSpan="00:00:21.365" />
   <FilesCreated>
@@ -15,4 +16,21 @@
     <File Name="button.csv" Messages="1" />
   </FilesCreated>
   <Statistics BytesReceived="1714354" PacketsReceived="24446" BundlesReceived="24356" MessagesReceived="24446" ReceiveErrors="0" />
+=======
+  <ConnectionInformation ConnectionType="File" FilePath="F:\LOG_0048.XIO" />
+  <TimeStamps First="2021-04-28 14:23:52.082" Last="2021-04-28 14:28:01.041" TimeSpan="00:04:08.959" />
+  <FilesCreated>
+    <File Name="ahrsAlignment.csv" Messages="1" />
+    <File Name="sensors.csv" Messages="92517" />
+    <File Name="matrix.csv" Messages="92475" />
+    <File Name="linear.csv" Messages="92405" />
+    <File Name="euler.csv" Messages="2490" />
+    <File Name="earth.csv" Messages="2490" />
+    <File Name="altitude.csv" Messages="249" />
+    <File Name="battery.csv" Messages="249" />
+    <File Name="auxserial.csv" Messages="1046" />
+    <File Name="button.csv" Messages="2" />
+  </FilesCreated>
+  <Statistics BytesReceived="19969887" PacketsReceived="284013" BundlesReceived="283923" MessagesReceived="284013" ReceiveErrors="0" />
+>>>>>>> ff03c21 (remove acceleration related calculations to reduce memory use)
 </Device>

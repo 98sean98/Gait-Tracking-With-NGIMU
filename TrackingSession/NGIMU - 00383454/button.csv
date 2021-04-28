@@ -1,2 +1,7 @@
 Time (s)
+<<<<<<< HEAD
 20.365995407
+=======
+243.740338326
+247.964670181
+>>>>>>> ff03c21 (remove acceleration related calculations to reduce memory use)

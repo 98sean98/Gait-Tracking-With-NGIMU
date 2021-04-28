@@ -45,7 +45,11 @@
 /serial/invert, False
 /sd/automatic, True
 /sd/prefix, "LOG"
+<<<<<<< HEAD
 /sd/number, 46
+=======
+/sd/number, 48
+>>>>>>> ff03c21 (remove acceleration related calculations to reduce memory use)
 /sd/size, 4096
 /sd/period, 0
 /ahrs/gain, 0.5f
@@ -85,5 +89,10 @@
 /muted, False
 /battery/voltage, 3.2f
 /battery/capacity, 1000f
+<<<<<<< HEAD
 /battery/health, 96.67969f
 /battery/cycles, 3.25f
+=======
+/battery/health, 96.58203f
+/battery/cycles, 3.46f
+>>>>>>> ff03c21 (remove acceleration related calculations to reduce memory use)
