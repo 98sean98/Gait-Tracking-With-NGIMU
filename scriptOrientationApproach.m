@@ -5,23 +5,32 @@ close all;
 % import data
 sessionData = importSession('TrackingSession');
 
-time = sessionData.(sessionData.deviceNames{1}).matrix.time;
+timeRaw = sessionData.(sessionData.deviceNames{1}).matrix.time;
 rotMRaw = sessionData.(sessionData.deviceNames{1}).matrix.matrix;
 
-frequency = 400; % Hz
-assumedConstantVelocity = 0.119; % m/s
-shouldCorrectBiasRotM = false;
+frequency = 50; % Hz
+assumedConstantVelocity = 0.1334; % m/s
+shouldCorrectBiasRotM = true;
 
-sampleSize = length(time);
+sampleSize = length(timeRaw);
 
+time = timeRaw;
 rotM = zeros(3, 3, sampleSize);
 
 for index = 1 : sampleSize
   rotM(:, :, index) = rotMRaw(:, :, index)';
 end
 
+% obtain rotation matrix for bias correction
+stationaryRowIndexCutOff = frequency * [10 30];
+stationaryRotM = rotM(:, :, stationaryRowIndexCutOff(1) : stationaryRowIndexCutOff(2));
+meanStationaryRotM = mean(stationaryRotM, 3);
+inverseMeanStationaryRotM = inverse(meanStationaryRotM);
+biasCorrectionRotM = eye(3);
+biasCorrectionRotM(1:2, :) = inverseMeanStationaryRotM(1:2, :);
+
 % remove first and last few seconds of data
-timeCutoff = [163 40]; % cut off first few and last few seconds of data
+timeCutoff = [79.5 16]; % cut off first few and last few seconds of data
 rowIndexCutOff = [0 0];
 
 for rowIndex = 1 : sampleSize
@@ -65,12 +74,6 @@ for index = 1 : sampleSize
   endif
 end
 
-% obtain rotation matrix for bias correction
-stationaryRowIndexCutOff = 400;
-stationaryRotM = rotM(:, :, 1 : stationaryRowIndexCutOff);
-meanStationaryRotM = mean(stationaryRotM, 3)
-biasCorrectionRotM = inverse(meanStationaryRotM)
-
 % use rotation matrices to propogate position data
 position = zeros(sampleSize, 3);
 
@@ -96,6 +99,15 @@ end
 
 % flip position y-axis along y = 0
 position(:, 2) = - position(:, 2);
+
+% print information
+timeCutoff
+travelTime = length(timeRaw) / frequency - timeCutoff(1) - timeCutoff(2)
+frequency
+assumedConstantVelocity
+shouldCorrectBiasRotM
+startPoint = position(1, :)
+endPoint = position(sampleSize, :)
 
 % plot data
 plotData(time, position);
