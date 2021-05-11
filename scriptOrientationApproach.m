@@ -24,13 +24,13 @@ end
 % obtain rotation matrix for bias correction
 stationaryRowIndexCutOff = frequency * [10 30];
 stationaryRotM = rotM(:, :, stationaryRowIndexCutOff(1) : stationaryRowIndexCutOff(2));
-meanStationaryRotM = mean(stationaryRotM, 3);
+meanStationaryRotM = mean(stationaryRotM, 3)
 inverseMeanStationaryRotM = inverse(meanStationaryRotM);
 biasCorrectionRotM = eye(3);
-biasCorrectionRotM(1:2, :) = inverseMeanStationaryRotM(1:2, :);
+biasCorrectionRotM(1:2, 1:2) = inverseMeanStationaryRotM(1:2, 1:2)
 
 % remove first and last few seconds of data
-timeCutoff = [79.5 16]; % cut off first few and last few seconds of data
+timeCutoff = [62.5 6]; % cut off first few and last few seconds of data
 rowIndexCutOff = [0 0];
 
 for rowIndex = 1 : sampleSize

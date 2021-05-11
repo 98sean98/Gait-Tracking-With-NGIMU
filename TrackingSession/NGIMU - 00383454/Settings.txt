@@ -45,7 +45,7 @@
 /serial/invert, False
 /sd/automatic, True
 /sd/prefix, "LOG"
-/sd/number, 53
+/sd/number, 52
 /sd/size, 4096
 /sd/period, 0
 /ahrs/gain, 0.5f
